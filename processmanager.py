@@ -25,8 +25,6 @@ import time, os, sys
 from imagereader import imagereader
 import image_interpreter
 from database_ops import db_manager
-from daemonize import Daemonize
-import argparse
 import extra_utils
 
 DATA_LIMIT = 15000
@@ -54,6 +52,10 @@ class processmanager(object):
             pass
 
         logger.info("init done")
+
+    def start(self):
+        self.active = True
+        self.main()
 
     def main(self):
         logger.info("now starting")
@@ -90,45 +92,22 @@ class processmanager(object):
             logger.info('{} items left to process'.format(len(self.imagecache)))
         return False
 
-
-    def check_data_limit(self):
-        #check if we are getting close to our data limit (16G)
-
-        space = extra_utils.folder_size()
-        logger.info('Checking file sizes')
-        if space != self.space_used:
-            self.space_used = space
-            logger.info('size on disk changed: {}'.format(self.space_used))
-        if DATA_LIMIT - self.space_used < 1500 and time.time() - self.last_mail_time < MIN_MAIL_INTERVAL:
-            logger.info('sending email')
-            try:
-                message = 'RBPI storage ({}mb) nearing maximum ({}mb). Please clear'.format(self.space_used, DATA_LIMIT)
-                extra_utils.send_mail(message, self.secrets['email'])
-                self.last_mail_time = time.time()
-            except Exception as e:
-                logger.error('Email could not be sent')
-
-
-
-
     def cache_image(self, image):
         self.imagecache.append(image)
 
 
-    def start(self):
-        self.active = True
-        self.main()
 
 
 
-def go():
+
+def main():
     pm = processmanager(0, True)
     pm.start()
 
 
 if __name__ == "__main__":
     try:
-        go()
+        main()
     except Exception as e:
         logger.critical('process failed ' + str(e))
         sys.exit(e)
