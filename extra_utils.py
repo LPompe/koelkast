@@ -4,6 +4,23 @@ import json
 
 last_mail_time = time.time()
 
+
+def get_logger(loc = '/data/logs/cameralog'):
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+
+
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+    fh = logging.FileHandler(loc)
+    fh.setLevel(logging.INFO)
+    fh.setFormatter(formatter)
+    logger.addHandler(fh)
+
+    logger.info('log started')
+    logger.info('starting imports ')
+    return logger
+
 def get_secrets(loc = 'secrets.json'):
     f = open('secrets.json', 'r')
     j = json.loads(f.read())
