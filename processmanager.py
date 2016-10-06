@@ -2,19 +2,6 @@
 from __future__ import print_function, division
 import logging
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
-
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-
-fh = logging.FileHandler('log.log')
-fh.setLevel(logging.INFO)
-fh.setFormatter(formatter)
-logger.addHandler(fh)
-
-logger.info('log started')
-logger.info('starting imports ')
 
 
 import numpy as np
@@ -29,8 +16,7 @@ import extra_utils
 
 DATA_LIMIT = 15000
 MIN_MAIL_INTERVAL = 21600
-
-logger.info('imports done')
+logger = None
 
 
 class processmanager(object):
@@ -76,7 +62,6 @@ class processmanager(object):
     def process_cache(self):
         if len(self.imagecache) == 0:
             logger.info('cache empty, done')
-            #if we processed all the images, reset our image cache
 
             return True
 
@@ -106,8 +91,29 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        logger.critical('process failed ' + str(e))
-        sys.exit(e)
+    if sys.argv[1] == 'start':
+        logger = extra_utils.get_logger()
+        logger.info('imports done')
+        try:
+            if 'pidfile.pid' in os.listdir('/data'):
+                logger.critical('process already running, exiting')
+                raise SystemError('process already running, exiting')
+
+            pid = os.getpid()
+            pidfile = open('/data/pidfile.pid', 'w')
+            pidfile.write(pid)
+            pidfile.close()
+            main()
+        except Exception as e:
+            logger.critical('process failed ' + str(e))
+            os.remove('/data/pidfile.pid')
+            sys.exit(e)
+
+    elif sys.argv[1] == 'kill':
+        if 'pidfile.pid' not in os.listdir('/data'):
+            raise SystemError('process not running, exiting')
+        pidfile = open('/data/pidfile.pid', 'r')
+        pid = pidfile.read()
+        os.sys('kill ' + pid)
+        pidfile.close()
+        os.remove('/data/pidfile.pid')
