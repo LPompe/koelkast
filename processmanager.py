@@ -101,7 +101,7 @@ if __name__ == "__main__":
 
             pid = os.getpid()
             pidfile = open('/data/pidfile.pid', 'w')
-            pidfile.write(pid)
+            pidfile.write(str(pid))
             pidfile.close()
             main()
         except Exception as e:
