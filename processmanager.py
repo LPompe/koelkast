@@ -91,29 +91,11 @@ def main():
 
 
 if __name__ == "__main__":
-    if sys.argv[1] == 'start':
-        logger = extra_utils.get_logger()
-        logger.info('imports done')
-        try:
-            if 'pidfile.pid' in os.listdir('/data'):
-                logger.critical('process already running, exiting')
-                raise SystemError('process already running, exiting')
-
-            pid = os.getpid()
-            pidfile = open('/data/pidfile.pid', 'w')
-            pidfile.write(str(pid))
-            pidfile.close()
-            main()
-        except Exception as e:
-            logger.critical('process failed ' + str(e))
-            os.remove('/data/pidfile.pid')
-            sys.exit(e)
-
-    elif sys.argv[1] == 'kill':
-        if 'pidfile.pid' not in os.listdir('/data'):
-            raise SystemError('process not running, exiting')
-        pidfile = open('/data/pidfile.pid', 'r')
-        pid = pidfile.read()
-        os.sys('kill ' + pid)
-        pidfile.close()
+    logger = extra_utils.get_logger()
+    logger.info('imports done')
+    try:
+        main()
+    except Exception as e:
+        logger.critical('process failed ' + str(e))
         os.remove('/data/pidfile.pid')
+        sys.exit(e)
