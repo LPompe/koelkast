@@ -1,6 +1,6 @@
 import os, time
 import json
-
+import logging
 
 last_mail_time = time.time()
 
