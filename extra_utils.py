@@ -1,6 +1,6 @@
 import os, time
 import json
-import logging
+
 
 last_mail_time = time.time()
 
@@ -21,8 +21,8 @@ def get_logger(loc = '/data/logs/cameralog'):
     logger.info('starting imports ')
     return logger
 
-def get_secrets(loc = 'secrets.json'):
-    f = open('secrets.json', 'r')
+def get_secrets(loc = '/home/pi/git/koelkast/secrets.json'):
+    f = open(loc, 'r')
     j = json.loads(f.read())
     f.close()
     return j
