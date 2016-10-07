@@ -1,4 +1,4 @@
-until python test.py; do
-    echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
-    sleep 1
+until python processmanager.py > /data/logs/cameralog 1>&2 &; do
+    echo "Main program loop crashed $?.  Respawning.." >&2 >> /data/logs/systemlog.log
+    sleep 10
 done
