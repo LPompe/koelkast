@@ -87,6 +87,7 @@ class processmanager(object):
 
 def main():
     pm = processmanager(0, True)
+    pm.start()
 
 
 if __name__ == "__main__":
