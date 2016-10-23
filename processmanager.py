@@ -13,6 +13,7 @@ from imagereader import imagereader
 import image_interpreter
 from database_ops import db_manager
 import extra_utils
+from collections import deque
 
 DATA_LIMIT = 15000
 MIN_MAIL_INTERVAL = 21600
@@ -25,7 +26,7 @@ class processmanager(object):
         self.imagereader = imagereader(logger, n_camera)
         self.active = False
         self.ex_image = self.imagereader.ex_image
-        self.imagecache = []
+        self.imagecache = deque()
         self.training_mode = training_mode
         self.db_manager = db_manager(logger)
         self.last_mail_time = time.time()
@@ -60,7 +61,7 @@ class processmanager(object):
 
 
     def process_cache(self):
-        if len(self.imagecache) == 0:
+        if not self.imagecache:
             logger.info('cache empty, done')
 
             return True
@@ -78,7 +79,7 @@ class processmanager(object):
         return False
 
     def cache_image(self, image):
-        self.imagecache.append(image)
+        self.imagecache.appendleft(image)
 
 
 
