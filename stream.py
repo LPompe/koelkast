@@ -29,11 +29,13 @@ def get_latest_open_sequence(vs: PiVideoStream) -> list:
 
     sequence = list()
     is_currently_open = False
+    print("Starting sequence capture")
     while True:
         #read one frame
         frame = vs.read()
+        open = is_open(frame)
         # if we read a valid frame, and the fridge is open, add it to the sequence
-        if not frame is None and is_open(frame):
+        if not frame is None and open:
 
             is_currently_open = True
             frame = imutils.resize(frame, *params.IMAGE_RESOLUTION)
@@ -42,5 +44,6 @@ def get_latest_open_sequence(vs: PiVideoStream) -> list:
 
         # if we read a valid frame, the fridge was open, but not anymore:
         # yield the sequence
-        elif not frame is None and is_currently_open and not is_open(frame):
+        elif not frame is None and is_currently_open and not open:
+            print("Returing sequence")
             return sequence
