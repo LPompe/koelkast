@@ -28,9 +28,8 @@ def store_sequence(sequence: list) -> None:
     print("H5 stored")
 
 
-def remove_duplicates(sequence: list) -> np.array:
+def remove_duplicates(sequence: list) -> list:
     print("Removing duplicates")
-    sequence = np.array(sequence, dtype=np.uint8)
     unique_indices = np.unique(sequence, axis=0, return_index=True)[1]
     unique_sequence = [sequence[i] for i in sorted(unique_indices)]
     print("Done removing duplicates")

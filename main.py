@@ -23,12 +23,10 @@ def init() -> None:
 
 def main_loop(vs: PiVideoStream) -> None:
 
-    try:
         while True:
             latest_sequence = stream.get_latest_open_sequence(vs)
             data_storage.store_sequence(latest_sequence)
-    except:
-        vs.close()
+
 
 
 init()
