@@ -30,6 +30,8 @@ def get_latest_open_sequence(vs: PiVideoStream) -> list:
     sequence = list()
     is_currently_open = False
     print("Starting sequence capture")
+
+    prev_frame = None
     while True:
         #read one frame
         frame = vs.read()
@@ -40,7 +42,9 @@ def get_latest_open_sequence(vs: PiVideoStream) -> list:
             is_currently_open = True
             frame = imutils.resize(frame, *params.IMAGE_RESOLUTION)
             # only append if we read a new frame
-            sequence.append(frame)
+            if not np.array_equal(frame, prev_frame):
+                sequence.append(frame)
+                prev_frame = frame
 
         # if we read a valid frame, the fridge was open, but not anymore:
         # yield the sequence
