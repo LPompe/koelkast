@@ -14,7 +14,7 @@ import data_storage
 
 def init() -> None:
     video = PiVideoStream(resolution=params.IMAGE_RESOLUTION).start()
-    #vs.camera.exposure_mode = 'sports'
+    video.camera.awb_mode = 'off'
     video.camera.shutter_speed = params.SHUTTER_SPEED
     video.camera.awb_gains = params.WHITE_BALANCE
     video.camera.iso = params.ISO
@@ -23,9 +23,12 @@ def init() -> None:
 
 def main_loop(vs: PiVideoStream) -> None:
 
-    while True:
-        latest_sequence = stream.get_latest_open_sequence(vs)
-        data_storage.store_sequence(latest_sequence)
-        
-        
+    try:
+        while True:
+            latest_sequence = stream.get_latest_open_sequence(vs)
+            data_storage.store_sequence(latest_sequence)
+    except:
+        vs.close()
+
+
 init()
