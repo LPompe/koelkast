@@ -16,7 +16,7 @@ def init() -> None:
     video = PiVideoStream(resolution=params.IMAGE_RESOLUTION).start()
     #vs.camera.exposure_mode = 'sports'
     video.camera.shutter_speed = params.SHUTTER_SPEED
-    video.camera.awb_gain = params.WHITE_BALANCE
+    video.camera.awb_gains = params.WHITE_BALANCE
     video.camera.iso = params.ISO
     time.sleep(2.0)
     main_loop(video)
