@@ -23,7 +23,7 @@ def store_sequence(sequence: list) -> None:
 
     print("Storing h5py")
     h5f = h5py.File(file_loc, 'w')
-    h5f.create_dataset(file_name, data=data)
+    h5f.create_dataset('sequence', data=data)
     h5f.close()
     print("H5 stored")
 
@@ -33,5 +33,5 @@ def remove_duplicates(sequence: list) -> np.array:
     sequence = np.array(sequence, dtype=np.uint8)
     unique_indices = np.unique(sequence, axis=0, return_index=True)[1]
     unique_sequence = [sequence[i] for i in sorted(unique_indices)]
-    return unique_sequence
     print("Done removing duplicates")
+    return unique_sequence
