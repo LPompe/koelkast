@@ -12,15 +12,21 @@ def ensure_data_folder_existence() -> None:
         os.mkdir(folder_name)
 
 
-def store_sequence(sequence: OrderedDict) -> None:
+def store_sequence(sequence: list) -> None:
     """Store a sequence of images in h5py"""
     ensure_data_folder_existence()
     file_name = datetime.now().strftime('%Y/%m/%d-%H:%M:%S')
-    data_array_dims = (len(sequence), *params.IMAGE_RESOLUTION, 3)
-    data = np.array(sequence.keys(), dtype=np.uint8)
+    data = remove_duplicates(sequence)
 
     file_loc = '{}/{}.h5'.format(params.DATA_FOLDER_NAME, file_name)
 
     h5f = h5py.File(file_loc, 'w')
     h5f.create_dataset(file_name, data=data)
     h5f.close()
+
+
+def remove_duplicates(sequence: list) -> np.array:
+    sequence = np.array(sequence, dtype=np.uint8)
+    unique_indices = np.unique(sequence, axis=0, return_index=True)[1]
+    unique_sequence = [sequence[i] for i in sorted(unique_indices)]
+    return unique_sequence

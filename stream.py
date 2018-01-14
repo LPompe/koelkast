@@ -24,12 +24,11 @@ def is_open(image: np.array, threshhold: float  = params.OPEN_VALUE_THRESHOLD) -
         return False
 
 
-def get_latest_open_sequence(vs: PiVideoStream) -> OrderedDict:
+def get_latest_open_sequence(vs: PiVideoStream) -> list:
     """Returns an OrderedDict of images captured during an opening of the fridge"""
 
-    sequence = OrderedDict()
+    sequence = list()
     is_currently_open = False
-    prev_frame = None
     while True:
         #read one frame
         frame = vs.read()
@@ -39,9 +38,7 @@ def get_latest_open_sequence(vs: PiVideoStream) -> OrderedDict:
             is_currently_open = True
             frame = imutils.resize(frame, *params.IMAGE_RESOLUTION)
             # only append if we read a new frame
-            sequence[frame] = None
-
-            prev_frame = frame
+            sequence.append(frame)
 
         # if we read a valid frame, the fridge was open, but not anymore:
         # yield the sequence
