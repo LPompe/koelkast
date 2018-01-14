@@ -1,3 +1,5 @@
 secrets.json
 *.pyc
+data/*
+*.log
 __pycache__
