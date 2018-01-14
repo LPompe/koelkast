@@ -1,6 +1,5 @@
 from imutils.video.pivideostream import PiVideoStream
 from imutils.video import FPS
-from camera import Camera
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 import argparse
