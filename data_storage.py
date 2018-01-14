@@ -15,7 +15,7 @@ def ensure_data_folder_existence() -> None:
 def store_sequence(sequence: list) -> None:
     """Store a sequence of images in h5py"""
     ensure_data_folder_existence()
-    file_name = datetime.now().strftime('%Y/%m/%d-%H:%M:%S')
+    file_name = datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
     data = remove_duplicates(sequence)
 
     file_loc = '{}/{}.h5'.format(params.DATA_FOLDER_NAME, file_name)
